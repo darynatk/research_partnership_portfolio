@@ -3,23 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daryna Tkachenko — Measurement Design for Research at Scale</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ============================================================
-     PREMIUM / APPLE-STYLE PASS — rounded, soft depth, centered
-     Drop-in replacement <style> block. No HTML changes required.
-     Fonts: DM Sans (headings & UI) + system sans (body). Nothing else.
-     ============================================================ */
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap');
 
   :root{
-    --ink:#0c0f14;            /* deep ground */
-    --ink-2:#151a21;          /* raised card */
-    --ink-3:#1b212a;          /* hover surface */
-    --paper:#f5f4f0;          /* light sections */
+    --ink:#0c0f14;            
+    --ink-2:#151a21;          
+    --ink-3:#1b212a;          
+    --paper:#f5f4f0;         
     --paper-2:#eceae3;
     --line:rgba(255,255,255,.07);
     --line-paper:rgba(30,36,44,.10);
@@ -27,15 +21,15 @@
     --text-dim:#98a1ac;
     --text-ink:#1e242c;
     --text-ink-dim:#6d6f75;
-    --signal:#38b2ac;         /* signature teal — unchanged */
+    --signal:#38b2ac;        
     --signal-deep:#177d78;
     --signal-soft:rgba(56,178,172,.14);
     --maxw:1140px;
-    --measure:68ch;           /* centered reading column */
+    --measure:68ch;           
     --heads:'DM Sans',system-ui,-apple-system,sans-serif;
     --body:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-    --r-card:20px;            /* card rounding */
-    --r-panel:24px;           /* large panel rounding */
+    --r-card:20px;            
+    --r-panel:24px;           
     --ease:cubic-bezier(.25,.6,.25,1);
     /* soft layered depth, reused everywhere */
     --shadow-card:0 1px 2px rgba(6,10,14,.25),0 16px 40px -18px rgba(6,10,14,.55);
@@ -92,7 +86,7 @@
   .paper h2,.paper h3{color:var(--text-ink)}
 
   /* ============================================================
-     HERO — clean photo, balanced grid, photo touches section base
+     HERO 
      ============================================================ */
   .hero{
     padding:clamp(88px,12vw,140px) 0 0;   /* zero bottom: photo meets the fold */
@@ -167,7 +161,7 @@
   .btn .ic{stroke-width:2}
   .ic-fill{fill:currentColor;stroke:none}
 
-  /* ---- Apple-style pill button with 3D ambient depth ---- */
+  /* ---- Pill button ---- */
   .btn{
     display:inline-flex;align-items:center;gap:14px;
     background:linear-gradient(180deg,#41bfb8 0%,#2ba39d 100%);
@@ -212,7 +206,7 @@
   .paper .link:hover{color:var(--signal-deep);background:rgba(23,125,120,.12)}
 
   /* ============================================================
-     LEDGER — soft split panel
+     LEDGER 
      ============================================================ */
   .ledger{background:var(--ink)}
   .ledger-grid{
@@ -248,7 +242,7 @@
   }
 
   /* ============================================================
-     OFFER — centered reading column
+     OFFER 
      ============================================================ */
   .offer .lead{
     font-family:var(--heads);font-weight:700;
@@ -266,7 +260,7 @@
   }
 
   /* ============================================================
-     ARCHETYPE CARDS — rounded soft-depth widgets
+     ARCHETYPE CARDS
      ============================================================ */
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:8px}
   .card{
@@ -300,7 +294,7 @@
   .throughline .hi,.hi{color:var(--signal)}
 
   /* ============================================================
-     FIGURE ONE — 75/25, centered column
+     FIGURE ONE 
      ============================================================ */
   .figure-block{background:#fbfaf6}
   .figure-block .wrap{max-width:920px}
@@ -395,7 +389,7 @@
   .chip b{color:var(--signal-deep);font-weight:700}
 
   /* ============================================================
-     FIGURE TWO — UN Women, centered metric cards
+     FIGURE TWO 
      ============================================================ */
   .un-head{max-width:var(--measure);margin:0 auto 14px;text-align:center}
   .un-head .method{
@@ -462,7 +456,7 @@
   .un-credit a:hover{text-decoration:underline}
 
   /* ============================================================
-     SELECTED RESEARCH — publication cards
+     SELECTED RESEARCH 
      ============================================================ */
   .pubs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:8px}
   .pub{
@@ -521,7 +515,7 @@
   .un-credit .read-btn{margin-top:16px}
 
   /* ============================================================
-     TIMELINE — rounded cards (positioning system preserved)
+     TIMELINE 
      ============================================================ */
   .tl-head{margin-bottom:14px}
   .tl-legend{display:flex;gap:24px;justify-content:center;margin-bottom:36px;
@@ -582,7 +576,7 @@
   .tl-overlap::before{content:"";display:none}
 
   /* ============================================================
-     ABOUT — centered essay + soft facts card
+     HOW I WORK
      ============================================================ */
   .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(40px,6vw,72px);align-items:start;
     max-width:1000px;margin:0 auto}
@@ -677,11 +671,11 @@
   .offer-body{text-align:center}
   .un-credit{
   text-align:center;
-  max-width:none;      /* release the 68ch cap so the credit fits on one line */
+  max-width:none;      
 }
 .un-credit .read-btn{margin-left:auto;margin-right:auto} /* center the button */
 
-/* --- LEDGER now light --- */
+
 .ledger{background:var(--paper);color:var(--text-ink)}
 .ledger .eyebrow{color:var(--text-ink)}
 .ledger .eyebrow .num{color:var(--signal-deep);background:rgba(23,125,120,.12)}
@@ -704,11 +698,11 @@
 .hero .btn .arw{width:28px;height:28px;font-size:.9rem}
 .hero .link{padding:9px 14px;font-size:.9rem}
 
-/* let them wrap again on narrow screens so nothing overflows */
+
 @media(max-width:720px){
   .hero .cta-row{flex-wrap:wrap}
 }
-/* ---------- top nav ---------- */
+/* ---------- Top navigation ---------- */
 .topnav{
   position:sticky;top:0;z-index:100;
   background:rgba(12,15,20,.72);
@@ -772,7 +766,7 @@ section,header.hero{scroll-margin-top:76px}
   border:1px solid var(--line);
 }
 
-/* duration bars on the axis — these are the "blocks that span the period" */
+/* Duration bars on the background's year axis */
 .tl-span{
   width:8px;
   opacity:.9;
@@ -783,7 +777,7 @@ section,header.hero{scroll-margin-top:76px}
 }
 .tl-dot{width:12px;height:12px;z-index:3}
 
-/* stronger connector line from card to its span on the axis */
+
 .tl-entry::after{background:var(--signal);opacity:.6;height:2px}
 
 .topnav-inner{height:56px;gap:14px}
@@ -792,7 +786,7 @@ section,header.hero{scroll-margin-top:76px}
 .topnav-links a{padding:7px 11px;font-size:.82rem}
 .topnav-cta{padding:8px 16px;font-size:.82rem}
 
-/* also drop the sticky offset a bit to match the shorter bar */
+
 section,header.hero{scroll-margin-top:70px}
 
 .btn{
@@ -834,16 +828,13 @@ section,header.hero{scroll-margin-top:70px}
     <p class="subtext"> Most of the work happens before the modeling starts: deciding what to count, how to sample it, and whether the data can even answer the question.</p>
     <p class="subhead"> <b>My strongest asset is in my mixed-methods background: </b>I know how to interrogate a dataset, pressure-test what it's really measuring, and relate the answer back to the people it's about.</p>
     <div class="cta-row">
-      <a class="btn" href="https://calendar.google.com/calendar/embed?src=darynatk%40gmail.com&ctz=Europe%2FVienna" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"/></svg>Schedule a call <span class="arw">→</span></a>
+      <a class="btn" href="https://calendar.app.google/dNuCTGfgeSwxfe2W9" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"/></svg>Schedule a call <span class="arw">→</span></a>
       <a class="link" href="https://docs.google.com/document/d/1nQ2KRdruJj3meMQs4DrzDj_g2eweat6DnOBDckdPGEs/edit?usp=sharing" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zm0 0v6h6M8 13h8M8 17h8M8 9h2"/></svg>Download CV ↗</a>
       <a class="link" href="https://www.linkedin.com/in/daryna-tkachenko" target="_blank" rel="noopener"><svg class="ic ic-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05 4 0 4.74 2.64 4.74 6.07V21H17.5v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.85V21H9z"/></svg> LinkedIn ↗</a>
     </div>
    </div>
    <div class="hero-photo">
     <div class="photo-frame">
-    <!-- PHOTO: replace src below. For a self-contained file that works when emailed,
-         use a base64 data URI (src="data:image/png;base64,....") OR a Google Drive
-         direct-view link of the form https://drive.google.com/uc?export=view&id=FILE_ID -->
     <img src="daryna_for_website.png" alt="Daryna Tkachenko" class="photo-ph">
     </div>
    </div>
@@ -1190,7 +1181,7 @@ section,header.hero{scroll-margin-top:70px}
     <h2>If my skills fit a problem on your roadmap, let's talk.</h2>
     <p>A brief call is enough to see whether we're a fit. Bring the problem, I'll bring the questions.</p>
     <div class="cta-row">
-      <a class="btn" href="https://calendar.google.com/calendar/embed?src=darynatk%40gmail.com&ctz=Europe%2FVienna" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"/></svg>Schedule a call <span class="arw">→</span></a>
+      <a class="btn" href="https://calendar.app.google/dNuCTGfgeSwxfe2W9" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"/></svg>Schedule a call <span class="arw">→</span></a>
     </div>
     <p class="beneath">
       <a href="https://docs.google.com/document/d/1nQ2KRdruJj3meMQs4DrzDj_g2eweat6DnOBDckdPGEs/edit?usp=sharing" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zm0 0v6h6M8 13h8M8 17h8M8 9h2"/></svg>Résumé</a>
