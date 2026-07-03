@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daryna Tkachenko — Measurement Design for Research at Scale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     PREMIUM / APPLE-STYLE PASS — rounded, soft depth, centered
+     Drop-in replacement <style> block. No HTML changes required.
+     Fonts: DM Sans (headings & UI) + system sans (body). Nothing else.
+     ============================================================ */
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap');
+
+  :root{
+    --ink:#0c0f14;            /* deep ground */
+    --ink-2:#151a21;          /* raised card */
+    --ink-3:#1b212a;          /* hover surface */
+    --paper:#f5f4f0;          /* light sections */
+    --paper-2:#eceae3;
+    --line:rgba(255,255,255,.07);
+    --line-paper:rgba(30,36,44,.10);
+    --text:#eceae4;
+    --text-dim:#98a1ac;
+    --text-ink:#1e242c;
+    --text-ink-dim:#6d6f75;
+    --signal:#38b2ac;         /* signature teal — unchanged */
+    --signal-deep:#177d78;
+    --signal-soft:rgba(56,178,172,.14);
+    --maxw:1140px;
+    --measure:68ch;           /* centered reading column */
+    --heads:'DM Sans',system-ui,-apple-system,sans-serif;
+    --body:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --r-card:20px;            /* card rounding */
+    --r-panel:24px;           /* large panel rounding */
+    --ease:cubic-bezier(.25,.6,.25,1);
+    /* soft layered depth, reused everywhere */
+    --shadow-card:0 1px 2px rgba(6,10,14,.25),0 16px 40px -18px rgba(6,10,14,.55);
+    --shadow-card-hover:0 2px 4px rgba(6,10,14,.25),0 28px 60px -22px rgba(6,10,14,.6);
+    --shadow-card-paper:0 1px 2px rgba(30,36,44,.06),0 18px 44px -20px rgba(30,36,44,.22);
+    --shadow-card-paper-hover:0 2px 4px rgba(30,36,44,.07),0 30px 60px -24px rgba(30,36,44,.28);
+    --shadow-btn:0 2px 4px rgba(6,10,14,.18),0 18px 36px -10px rgba(23,125,120,.55);
+    --shadow-btn-hover:0 3px 6px rgba(6,10,14,.18),0 26px 48px -12px rgba(23,125,120,.65);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  ::selection{background:var(--signal);color:var(--ink)}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(22px,4vw,44px)}
+
+  h1,h2,h3,h4,.display{
+    font-family:var(--heads);
+    font-weight:700;letter-spacing:-0.022em;line-height:1.08;
+  }
+  h1{font-weight:800}
+  .mono{font-family:var(--heads)}
+
+  /* ---- eyebrow: prominent structural section heading ---- */
+  .eyebrow{
+    display:flex;align-items:center;justify-content:center;gap:16px;
+    font-family:var(--heads);
+    font-size:clamp(1.35rem,2.6vw,1.85rem);
+    font-weight:700;letter-spacing:-0.015em;text-transform:none;
+    color:var(--text);
+    margin-bottom:clamp(40px,6vw,60px);
+    text-align:center;
+  }
+  .eyebrow .num{
+    font-size:.95rem;font-weight:700;letter-spacing:.02em;
+    color:var(--signal);background:var(--signal-soft);
+    padding:8px 18px;border-radius:9999px;
+  }
+  .ticks{display:none}
+  .paper .eyebrow{color:var(--text-ink)}
+  .paper .eyebrow .num{color:var(--signal-deep);background:rgba(23,125,120,.12)}
+
+  section{padding:clamp(88px,11vw,128px) 0}
+  .paper{background:var(--paper);color:var(--text-ink)}
+  .paper h2,.paper h3{color:var(--text-ink)}
+
+  /* ============================================================
+     HERO — clean photo, balanced grid, photo touches section base
+     ============================================================ */
+  .hero{
+    padding:clamp(88px,12vw,140px) 0 0;   /* zero bottom: photo meets the fold */
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .hero::before{
+    /* soft ambient glow instead of grid lines */
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(58% 46% at 74% 62%,rgba(56,178,172,.10),transparent 70%),
+      radial-gradient(40% 34% at 18% 12%,rgba(56,178,172,.05),transparent 70%);
+  }
+  .hero .wrap{position:relative}
+  .hero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.35fr) minmax(300px,1fr);
+    gap:clamp(36px,6vw,80px);
+    align-items:end;
+  }
+  .hero-copy{padding-bottom:clamp(56px,8vw,96px)}
+  .hero .kicker{
+    font-family:var(--heads);font-size:.9rem;font-weight:600;letter-spacing:.01em;
+    text-transform:none;color:var(--signal);
+    background:var(--signal-soft);border-radius:9999px;
+    display:inline-flex;align-items:center;gap:0;
+    padding:9px 18px;margin-bottom:32px;
+  }
+  .hero .kicker::before{display:none;content:none}
+  .greet{
+    font-family:var(--heads);font-weight:600;
+    font-size:clamp(1.35rem,2.4vw,1.75rem);color:var(--text);
+    margin-bottom:20px;letter-spacing:-.015em;
+  }
+  .greet::after{content:"";display:inline-block;width:0}
+  h1{font-size:clamp(2.7rem,6vw,4.6rem);max-width:15ch;margin-bottom:32px}
+  .subtext{
+    color:var(--text);font-size:clamp(1.1rem,2vw,1.3rem);line-height:1.55;
+    max-width:47ch;margin-bottom:22px;
+  }
+  .subhead{
+    font-family:var(--body);font-weight:400;font-size:1.05rem;line-height:1.65;
+    color:var(--text-dim);max-width:52ch;margin-bottom:44px;
+  }
+  .subhead b{font-family:var(--heads);color:var(--text);font-weight:600}
+
+  /* photo: clean, frameless, resting on the section base */
+  .hero-photo{
+    display:flex;justify-content:center;align-self:end;
+    position:relative;
+  }
+  .hero-photo::before{content:none;display:none}
+  .hero-photo::after{content:none;display:none}
+  .photo-frame{
+    position:relative;z-index:1;
+    display:flex;justify-content:center;align-items:flex-end;
+    background:none;border:none;padding:0;margin:0;
+  }
+  .photo-frame::before{content:none;display:none}
+  .photo-frame::after{content:none;display:none}
+  .photo-ph{
+    width:100%;max-width:390px;height:auto;display:block;object-fit:cover;
+    position:relative;z-index:1;
+    filter:grayscale(1) contrast(1.04);
+  }
+  .photo-ph span{position:relative;z-index:1}
+
+  /* ---- CTA row ---- */
+  .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px}
+  .ic{width:1em;height:1em;vertical-align:-0.12em;margin-right:8px;
+    fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline-block}
+  .btn .ic{stroke-width:2}
+  .ic-fill{fill:currentColor;stroke:none}
+
+  /* ---- Apple-style pill button with 3D ambient depth ---- */
+  .btn{
+    display:inline-flex;align-items:center;gap:14px;
+    background:linear-gradient(180deg,#41bfb8 0%,#2ba39d 100%);
+    color:#fff;font-family:var(--heads);font-weight:600;
+    font-size:1.02rem;letter-spacing:.002em;
+    padding:14px 18px 14px 26px;
+    border-radius:9999px;text-decoration:none;border:none;
+    box-shadow:var(--shadow-btn),inset 0 1px 0 rgba(255,255,255,.25);
+    transition:transform .22s var(--ease),box-shadow .22s var(--ease),filter .22s var(--ease);
+  }
+  .btn:hover{
+    transform:translateY(-2px) scale(1.015);
+    box-shadow:var(--shadow-btn-hover),inset 0 1px 0 rgba(255,255,255,.28);
+    filter:brightness(1.04);
+  }
+  .btn:active{
+    transform:translateY(1px) scale(.985);
+    box-shadow:0 1px 2px rgba(6,10,14,.2),0 8px 18px -8px rgba(23,125,120,.5);
+    filter:brightness(.97);
+  }
+  /* arrow inside a translucent lighter circle, far right */
+  .btn .arw{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(255,255,255,.22);
+    font-size:1rem;line-height:1;
+    transition:background .22s var(--ease),transform .22s var(--ease);
+  }
+  .btn:hover .arw{background:rgba(255,255,255,.32);transform:translateX(2px)}
+
+  /* quiet pill links */
+  .link{
+    font-family:var(--heads);font-size:.95rem;font-weight:600;letter-spacing:.002em;
+    color:var(--text);text-decoration:none;
+    padding:10px 16px;border-radius:9999px;border:none;
+    background:rgba(255,255,255,.06);
+    transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease);
+  }
+  .link:hover{background:rgba(56,178,172,.16);color:var(--signal);transform:translateY(-1px)}
+  .link:active{transform:translateY(0)}
+  .paper .link{color:var(--text-ink);background:rgba(30,36,44,.06)}
+  .paper .link:hover{color:var(--signal-deep);background:rgba(23,125,120,.12)}
+
+  /* ============================================================
+     LEDGER — soft split panel
+     ============================================================ */
+  .ledger{background:var(--ink)}
+  .ledger-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    background:var(--ink-2);border:none;
+    border-radius:var(--r-panel);overflow:hidden;margin-top:8px;
+    box-shadow:var(--shadow-card);
+    max-width:960px;margin-left:auto;margin-right:auto;
+  }
+  .ledger-col{
+    padding:clamp(36px,5vw,56px) clamp(28px,4vw,52px);
+    transition:background .25s var(--ease);
+  }
+  .ledger-col:hover{background:var(--ink-3)}
+  .ledger-col+.ledger-col{border-left:1px solid var(--line)}
+  .ledger-tag{
+    display:inline-block;
+    font-family:var(--heads);font-size:.9rem;font-weight:700;letter-spacing:.01em;
+    text-transform:none;color:var(--signal);background:var(--signal-soft);
+    padding:7px 16px;border-radius:9999px;margin-bottom:22px;
+  }
+  .ledger-col p{
+    font-family:var(--heads);font-weight:500;
+    font-size:clamp(1.2rem,2.1vw,1.45rem);line-height:1.38;letter-spacing:-.014em;
+  }
+  .ledger-foot{
+    margin-top:26px;color:var(--text-dim);font-size:1rem;max-width:60ch;
+    padding-left:18px;border-left:2px solid var(--signal);
+  }
+  .ledger-note{
+    margin-top:18px;font-family:var(--body);font-size:.85rem;
+    color:var(--text-dim);padding-top:14px;border-top:1px solid var(--line);
+  }
+
+  /* ============================================================
+     OFFER — centered reading column
+     ============================================================ */
+  .offer .lead{
+    font-family:var(--heads);font-weight:700;
+    font-size:clamp(1.5rem,3vw,2.1rem);line-height:1.25;letter-spacing:-.02em;
+    max-width:30ch;margin:0 auto 30px;text-align:center;color:var(--text-ink);
+  }
+  .offer-body{
+    max-width:var(--measure);margin:0 auto;
+    font-size:1.06rem;color:var(--text-ink);line-height:1.75;
+    border:none;padding:0;
+  }
+  .smallprint{
+    margin:26px auto 0;font-size:.95rem;font-style:italic;
+    color:var(--text-ink-dim);max-width:var(--measure);line-height:1.6;padding:0;
+  }
+
+  /* ============================================================
+     ARCHETYPE CARDS — rounded soft-depth widgets
+     ============================================================ */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:8px}
+  .card{
+    background:var(--ink-2);border:none;border-radius:var(--r-card);
+    padding:30px 28px 32px;position:relative;overflow:hidden;
+    box-shadow:var(--shadow-card);
+    transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease);
+  }
+  .card::before{content:none;display:none}
+  .card::after{content:none;display:none}
+  .card:hover{
+    transform:translateY(-5px);
+    box-shadow:var(--shadow-card-hover);
+    background:var(--ink-3);
+  }
+  .card .idx{
+    display:inline-block;
+    font-family:var(--heads);font-size:.82rem;font-weight:600;letter-spacing:.01em;
+    text-transform:none;color:var(--signal);background:var(--signal-soft);
+    padding:6px 14px;border-radius:9999px;margin-bottom:22px;
+  }
+  .card h3{font-size:1.26rem;margin-bottom:14px;line-height:1.2}
+  .card p{color:var(--text-dim);font-size:.98rem;line-height:1.64}
+  .card p strong{color:var(--text);font-weight:600}
+  .throughline{
+    margin:52px auto 0;font-family:var(--heads);font-weight:500;
+    font-size:clamp(1.15rem,2.2vw,1.4rem);
+    line-height:1.48;max-width:62ch;color:var(--text);
+    text-align:center;letter-spacing:-.012em;
+  }
+  .throughline .hi,.hi{color:var(--signal)}
+
+  /* ============================================================
+     FIGURE ONE — 75/25, centered column
+     ============================================================ */
+  .figure-block{background:#fbfaf6}
+  .figure-block .wrap{max-width:920px}
+  .fig-lead{max-width:var(--measure);margin:0 auto 48px;text-align:center}
+  .fig-lead h2{font-size:clamp(1.85rem,3.8vw,2.6rem);margin-bottom:20px;letter-spacing:-.022em}
+  .fig-lead p{color:var(--text-ink-dim);font-size:1.05rem;line-height:1.72;border:none;padding:0;margin:0 auto;max-width:64ch;text-align:left}
+
+  .bar-title{
+    font-family:var(--heads);font-weight:600;font-size:1.05rem;letter-spacing:-.008em;
+    color:var(--text-ink);margin-bottom:16px;text-align:center;
+  }
+  .bar-title::before{content:none;display:none}
+  .bar75{
+    display:flex;width:100%;height:112px;border-radius:var(--r-card);overflow:hidden;
+    border:none;background:#fff;
+    box-shadow:var(--shadow-card-paper);
+  }
+  .seg{display:flex;flex-direction:column;justify-content:center;padding:0 28px;
+    color:#fff;position:relative;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+  .seg-rep{width:75%;background:linear-gradient(180deg,#41bfb8,#2ba39d)}
+  .seg-arch{width:25%;background:linear-gradient(180deg,#3b434e,#313943)}
+  .seg .pct{font-family:var(--heads);font-weight:800;font-size:2.15rem;line-height:1;letter-spacing:-.02em}
+  .seg .lbl{font-family:var(--heads);font-size:.8rem;font-weight:500;letter-spacing:.01em;margin-top:9px;opacity:.94}
+  .seg-rep .pct,.seg-rep .lbl{color:#073431}
+
+  .seg-legend{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px}
+  .sl{
+    padding:24px 26px;background:#fff;border:none;border-radius:var(--r-card);
+    box-shadow:var(--shadow-card-paper);
+    transition:transform .22s var(--ease),box-shadow .22s var(--ease);
+    position:relative;overflow:hidden;
+  }
+  .sl::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:4px;
+    border-radius:4px 4px 0 0;background:var(--line-paper);
+  }
+  .sl-rep::before{background:var(--signal)}
+  .sl-arch::before{background:#3b434e}
+  .sl:hover{transform:translateY(-4px);box-shadow:var(--shadow-card-paper-hover)}
+  .sl-key{display:block;font-family:var(--heads);font-weight:700;font-size:1rem;color:var(--text-ink);margin-bottom:8px}
+  .sl-txt{font-size:.95rem;line-height:1.6;color:var(--text-ink-dim)}
+  .sl-txt b{color:var(--text-ink);font-weight:600}
+
+  .fig-cap{margin:30px auto 0;max-width:var(--measure);color:var(--text-ink);font-size:1.04rem;line-height:1.68}
+  .fig-note{display:block;margin-top:12px;font-size:.9rem;color:var(--text-ink-dim);font-style:italic}
+  .fig-cap.closing{
+    margin-top:56px;padding:32px clamp(24px,4vw,40px);
+    background:#fff;border-radius:var(--r-card);box-shadow:var(--shadow-card-paper);
+    border:none;font-size:1.06rem;
+  }
+  .fig-cap strong{font-family:var(--heads);font-weight:700}
+
+  .finding{margin:60px auto 0;max-width:var(--measure)}
+  .finding:first-of-type{margin-top:8px}
+  /* badge: soft pill, no box frame */
+  .finding-idx{
+    display:inline-block;
+    font-family:var(--heads);font-size:.82rem;font-weight:600;letter-spacing:.01em;
+    text-transform:none;color:var(--signal-deep);
+    background:rgba(23,125,120,.10);
+    padding:7px 16px;border-radius:9999px;border:none;
+  }
+  .finding-h{
+    font-size:clamp(1.35rem,2.6vw,1.75rem);margin:16px 0 14px;color:var(--text-ink);
+    letter-spacing:-.018em;
+  }
+  .finding-p{
+    color:var(--text-ink-dim);font-size:1.04rem;line-height:1.7;margin:0;
+  }
+  .finding-p b{color:var(--text-ink);font-weight:600}
+
+  .mini-stats{display:flex;flex-wrap:wrap;gap:10px;margin:20px auto 0;max-width:var(--measure)}
+  .mini-stats span{
+    font-family:var(--heads);font-size:.85rem;font-weight:500;
+    color:var(--text-ink);background:#fff;
+    border:none;border-radius:9999px;
+    padding:9px 16px;
+    box-shadow:0 1px 2px rgba(30,36,44,.06),0 8px 20px -10px rgba(30,36,44,.18);
+    transition:transform .18s var(--ease),box-shadow .18s var(--ease);
+  }
+  .mini-stats span:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-paper)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px;justify-content:center}
+  .chip{
+    font-family:var(--heads);font-size:.85rem;font-weight:500;
+    background:#fff;border:none;border-radius:9999px;
+    padding:10px 16px;color:var(--text-ink);
+    box-shadow:0 1px 2px rgba(30,36,44,.06),0 8px 20px -10px rgba(30,36,44,.18);
+    transition:transform .18s var(--ease),box-shadow .18s var(--ease);
+  }
+  .chip:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-paper)}
+  .chip b{color:var(--signal-deep);font-weight:700}
+
+  /* ============================================================
+     FIGURE TWO — UN Women, centered metric cards
+     ============================================================ */
+  .un-head{max-width:var(--measure);margin:0 auto 14px;text-align:center}
+  .un-head .method{
+    display:inline-block;
+    font-family:var(--heads);font-size:.82rem;font-weight:600;letter-spacing:.01em;
+    text-transform:none;color:var(--signal);background:var(--signal-soft);
+    padding:7px 16px;border-radius:9999px;border:none;margin-bottom:22px;
+  }
+  .un-head h2{font-size:clamp(1.85rem,3.6vw,2.5rem);margin-bottom:20px;letter-spacing:-.022em}
+  .un-head .q{
+    font-family:var(--heads);font-weight:500;
+    font-size:1.2rem;color:var(--text);line-height:1.45;max-width:46ch;
+    margin:0 auto;padding:0;border:none;
+  }
+
+  .contrast{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:44px auto 8px;max-width:760px}
+  .contrast-cell{
+    border:none;border-radius:var(--r-card);
+    padding:30px 28px;background:var(--ink-2);
+    display:flex;align-items:baseline;gap:20px;position:relative;
+    box-shadow:var(--shadow-card);
+    transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease);
+  }
+  .contrast-cell::before{content:none;display:none}
+  .contrast-cell::after{content:none;display:none}
+  .contrast-cell:hover{
+    transform:translateY(-5px);box-shadow:var(--shadow-card-hover);background:var(--ink-3);
+  }
+  .contrast-cell .big{
+    font-family:var(--heads);font-weight:800;
+    font-size:clamp(2.3rem,4.6vw,3.1rem);line-height:1;color:var(--signal);
+    flex-shrink:0;letter-spacing:-.03em;
+  }
+  .contrast-cell.muted .big{color:var(--text-dim)}
+  .contrast-cell .cap{color:var(--text-dim);font-size:.95rem;max-width:30ch;line-height:1.5}
+  .contrast-cell .cap b{color:var(--text);font-weight:600}
+  .vs{display:none}
+
+  .un-numbers{
+    display:flex;flex-wrap:wrap;gap:0;margin:32px auto 0;
+    background:var(--ink-2);border:none;border-radius:var(--r-card);
+    box-shadow:var(--shadow-card);max-width:760px;overflow:hidden;
+  }
+  .un-numbers .pair{
+    font-family:var(--body);font-size:.85rem;color:var(--text-dim);
+    padding:22px 28px;flex:1;min-width:260px;
+  }
+  .un-numbers .pair+.pair{border-left:1px solid var(--line)}
+  .un-numbers .pair .l{display:block;margin-bottom:8px;font-family:var(--heads);font-weight:500}
+  .un-numbers .pair .v{font-family:var(--heads);color:var(--text);font-size:1.15rem;font-weight:700}
+  .un-numbers .pair .v .w{color:var(--signal)}
+
+  .un-why{
+    margin:48px auto 0;max-width:var(--measure);color:var(--text-dim);
+    font-size:1.04rem;line-height:1.74;padding:0;border:none;
+  }
+  .un-why strong{color:var(--text);font-weight:600}
+  .un-credit{
+    margin:30px auto 0;max-width:var(--measure);
+    font-family:var(--body);font-size:.85rem;
+    color:var(--text-dim);line-height:1.8;padding:0;
+  }
+  .un-credit a{color:var(--signal);text-decoration:none}
+  .un-credit a:hover{text-decoration:underline}
+
+  /* ============================================================
+     SELECTED RESEARCH — publication cards
+     ============================================================ */
+  .pubs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:8px}
+  .pub{
+    background:#fff;border:none;border-radius:var(--r-card);
+    padding:28px 26px 28px;display:flex;flex-direction:column;position:relative;
+    box-shadow:var(--shadow-card-paper);
+    transition:transform .25s var(--ease),box-shadow .25s var(--ease);
+  }
+  .pub::before{content:none;display:none}
+  .pub:hover{transform:translateY(-5px);box-shadow:var(--shadow-card-paper-hover)}
+  .pub .mtag{
+    display:inline-block;align-self:flex-start;
+    font-family:var(--heads);font-size:.8rem;font-weight:600;letter-spacing:.01em;
+    text-transform:none;color:var(--signal-deep);background:rgba(23,125,120,.10);
+    padding:6px 14px;border-radius:9999px;
+    border:none;margin-bottom:20px;padding-bottom:6px;
+  }
+  .pub h3{
+    font-size:1.18rem;line-height:1.26;color:var(--text-ink);margin-bottom:16px;
+    letter-spacing:-.016em;
+  }
+  .pub .move{color:var(--text-ink-dim);font-size:.94rem;line-height:1.62;margin-bottom:18px}
+  .pub .move b{color:var(--text-ink);font-weight:600}
+  .pub .find{
+    font-size:.99rem;color:var(--text-ink);font-weight:500;
+    line-height:1.5;margin-bottom:20px;padding:14px 18px;
+    background:var(--signal-soft);border:none;border-left:none;
+    border-radius:14px;
+  }
+  .pub .nums{font-family:var(--body);font-size:.85rem;color:var(--text-ink-dim);
+    line-height:1.9;margin-bottom:22px}
+  .pub .nums b{color:var(--signal-deep)}
+  .pub .credit{
+    margin-top:auto;font-family:var(--body);font-size:.8rem;
+    color:var(--text-ink-dim);line-height:1.7;padding-top:16px;border-top:1px solid var(--paper-2);
+  }
+  .pub .read-btn{margin-top:14px}
+  .pub .credit a{color:var(--signal-deep);text-decoration:none}
+  .pub .credit a:hover{text-decoration:underline}
+
+  .read-btn{
+    display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+    padding:11px 22px;border-radius:9999px;
+    background:linear-gradient(180deg,#1e918b 0%,#146e6a 100%);color:#fff;
+    font-family:var(--heads);font-size:.9rem;font-weight:600;text-decoration:none;
+    letter-spacing:.002em;align-self:flex-start;border:none;
+    box-shadow:0 1px 2px rgba(30,36,44,.12),0 12px 26px -8px rgba(23,125,120,.5),inset 0 1px 0 rgba(255,255,255,.2);
+    transition:transform .22s var(--ease),box-shadow .22s var(--ease),filter .22s var(--ease);
+  }
+  .read-btn:hover{
+    transform:translateY(-2px);filter:brightness(1.06);
+    box-shadow:0 2px 4px rgba(30,36,44,.12),0 18px 34px -10px rgba(23,125,120,.6),inset 0 1px 0 rgba(255,255,255,.22);
+  }
+  .read-btn:active{transform:translateY(1px);filter:brightness(.97);
+    box-shadow:0 1px 2px rgba(30,36,44,.14),0 6px 14px -6px rgba(23,125,120,.45)}
+  .un-credit .read-btn{margin-top:16px}
+
+  /* ============================================================
+     TIMELINE — rounded cards (positioning system preserved)
+     ============================================================ */
+  .tl-head{margin-bottom:14px}
+  .tl-legend{display:flex;gap:24px;justify-content:center;margin-bottom:36px;
+    font-family:var(--heads);font-size:.85rem;font-weight:500;color:var(--text-dim)}
+  .tl-legend .dot{display:inline-flex;align-items:center;gap:8px}
+  .tl-legend .dot::before{content:"";width:10px;height:10px;border-radius:50%}
+  .tl-legend .work::before{background:var(--signal)}
+  .tl-legend .study::before{background:#6f7681}
+
+  .timeline{position:relative;display:grid;grid-template-columns:1fr 92px 1fr;gap:0;
+    min-height:940px}
+  .tl-axis{position:relative}
+  .tl-axis::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;
+    background:repeating-linear-gradient(180deg,rgba(255,255,255,.12) 0 6px,transparent 6px 14px);transform:translateX(-50%)}
+  .tl-year{position:absolute;left:50%;transform:translateX(-50%);
+    font-family:var(--heads);font-size:.75rem;font-weight:600;color:var(--text-dim);
+    background:var(--ink-2);border-radius:9999px;padding:5px 12px;
+    box-shadow:0 1px 2px rgba(6,10,14,.3)}
+  .tl-span{position:absolute;left:50%;transform:translateX(-50%);width:4px;
+    background:var(--signal);border-radius:4px;opacity:.55}
+  .tl-dot{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);
+    width:10px;height:10px;border-radius:50%;background:var(--signal);
+    box-shadow:0 0 0 4px var(--ink)}
+  .tl-side{position:relative}
+  .tl-side .tl-entry{position:absolute}
+  .tl-side.exp{text-align:right}
+  .tl-side.exp .tl-entry{left:0;right:26px}
+  .tl-side.edu .tl-entry{left:26px;right:0}
+  .tl-entry{
+    background:var(--ink-2);border:none;border-radius:var(--r-card);
+    padding:24px 24px 26px;
+    box-shadow:var(--shadow-card);
+    transition:transform .22s var(--ease),box-shadow .22s var(--ease),background .22s var(--ease);
+  }
+  .tl-entry:hover{transform:translateY(-3px);box-shadow:var(--shadow-card-hover);background:var(--ink-3)}
+  .tl-entry::after{content:"";position:absolute;top:24px;width:22px;height:2px;border-radius:2px;
+    background:rgba(255,255,255,.12)}
+  .exp .tl-entry::after{right:-23px}
+  .edu .tl-entry::after{left:-23px}
+  .tl-entry .when{font-family:var(--heads);font-size:.78rem;font-weight:600;color:var(--signal);
+    margin-bottom:10px}
+  .tl-entry h4{font-size:1.08rem;font-weight:700;
+    color:var(--text);margin-bottom:4px;line-height:1.22}
+  .tl-entry .org{color:var(--text-dim);font-size:.92rem;margin-bottom:14px}
+  .tl-entry .context{color:var(--text-dim);font-size:.83rem;font-style:italic;margin-bottom:12px}
+  .tl-tags{display:flex;flex-wrap:wrap;gap:7px;justify-content:inherit}
+  .exp .tl-tags{justify-content:flex-end}
+  .tl-tag{font-family:var(--heads);font-size:.72rem;font-weight:500;
+    background:rgba(255,255,255,.06);border:none;border-radius:9999px;
+    padding:6px 12px;color:var(--text-dim);
+    transition:background .18s var(--ease),color .18s var(--ease)}
+  .tl-entry:hover .tl-tag{background:rgba(255,255,255,.1);color:var(--text)}
+  .tl-side.edu .tl-tag{border:none}
+  .tl-overlap{margin:40px auto 0;text-align:center;font-size:1rem;color:var(--text-dim);
+    padding:18px 26px;border:none;
+    background:var(--signal-soft);max-width:560px;
+    border-radius:var(--r-card);line-height:1.55}
+  .tl-overlap::before{content:"";display:none}
+
+  /* ============================================================
+     ABOUT — centered essay + soft facts card
+     ============================================================ */
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(40px,6vw,72px);align-items:start;
+    max-width:1000px;margin:0 auto}
+  .about p{font-size:1.07rem;line-height:1.76;color:var(--text-ink);max-width:56ch}
+  .about-copy p{margin-bottom:22px}
+  .about-copy p:first-child::first-letter{
+    font-size:inherit;float:none;padding:0;color:inherit;font-family:inherit;font-weight:inherit;line-height:inherit;
+  }
+  .about-facts{
+    font-family:var(--body);font-size:.86rem;line-height:1.8;color:var(--text-ink-dim);
+    background:#fff;border:none;border-radius:var(--r-card);
+    padding:12px 26px 16px;box-shadow:var(--shadow-card-paper);
+  }
+  .about-facts .v{display:block}
+  .about-facts .row{padding:16px 0;border-bottom:1px solid var(--paper-2)}
+  .about-facts .row:last-child{border-bottom:none}
+  .about-facts .row:first-child{padding-top:16px}
+  .about-facts .k{font-family:var(--heads);color:var(--signal-deep);display:block;margin-bottom:4px;
+    font-weight:600;font-size:.8rem;letter-spacing:.005em;text-transform:none}
+  .about-facts .v{color:var(--text-ink);font-size:.94rem}
+
+  /* ============================================================
+     CLOSING CTA
+     ============================================================ */
+  .close{text-align:center;background:var(--ink-2);
+    padding-top:clamp(72px,10vw,108px);padding-bottom:clamp(72px,10vw,108px);
+    position:relative;overflow:hidden}
+  .close::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(52% 60% at 50% 100%,rgba(56,178,172,.10),transparent 72%);
+  }
+  .close .wrap{position:relative}
+  .close h2{font-size:clamp(2rem,5vw,3.3rem);max-width:19ch;margin:0 auto 22px;letter-spacing:-.024em}
+  .close p{color:var(--text-dim);max-width:48ch;margin:0 auto 40px;font-size:1.08rem}
+  .close .cta-row{justify-content:center}
+  .close .beneath{margin-top:34px;font-family:var(--heads);font-size:.9rem;font-weight:500;color:var(--text-dim)}
+  .close .beneath a{color:var(--text);text-decoration:none;border:none;
+    padding:8px 14px;border-radius:9999px;background:rgba(255,255,255,.06);
+    transition:background .2s var(--ease),color .2s var(--ease)}
+  .close .beneath a:hover{color:var(--signal);background:rgba(56,178,172,.16);border:none}
+
+  footer{padding:40px 0;border-top:1px solid var(--line);font-family:var(--body);
+    font-size:.8rem;color:var(--text-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  /* ---------- focus ---------- */
+  a:focus-visible,summary:focus-visible,.btn:focus-visible{
+    outline:2px solid var(--signal);outline-offset:3px;border-radius:9999px}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:860px){
+    body{font-size:16px}
+    section{padding:72px 0}
+    .hero{padding-bottom:0}
+    .hero-grid{grid-template-columns:1fr;gap:40px}
+    .hero-copy{padding-bottom:0}
+    .hero-photo{order:1;justify-content:center}
+    .photo-ph{max-width:290px}
+    .ledger-grid{grid-template-columns:1fr}
+    .ledger-col+.ledger-col{border-left:none;border-top:1px solid var(--line)}
+    .cards,.pubs{grid-template-columns:1fr}
+    .contrast{grid-template-columns:1fr}
+    .un-numbers{flex-direction:column}
+    .un-numbers .pair+.pair{border-left:none;border-top:1px solid var(--line)}
+    .about-grid{grid-template-columns:1fr;gap:36px}
+    .bar75{height:auto;flex-direction:column}
+    .seg{width:100%!important;padding:22px 24px}
+    .seg-rep{min-height:120px}
+    .seg-arch{min-height:60px}
+    .seg-legend{grid-template-columns:1fr}
+    /* timeline collapses to single column, normal flow, chronological */
+    .timeline{grid-template-columns:20px 1fr;gap:0;min-height:0}
+    .tl-axis{grid-row:1/999}
+    .tl-axis::before{left:9px}
+    .tl-year{display:none}
+    .tl-side{grid-column:2;display:flex;flex-direction:column;gap:16px;margin-bottom:16px}
+    .tl-side .tl-entry{position:static;width:auto}
+    .tl-side.exp{text-align:left}
+    .exp .tl-tags{justify-content:flex-start}
+    .tl-entry{position:relative}
+    .tl-entry::after{content:attr(data-track);position:absolute;top:24px;right:22px;
+      width:auto;height:auto;background:none;
+      font-family:var(--heads);font-size:.7rem;font-weight:600;color:var(--signal);text-transform:uppercase;letter-spacing:.06em}
+    .tl-overlap{grid-column:1/-1}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .seg{transition:none!important}
+    *{animation:none!important;transition-duration:.01ms!important}
+  }
+
+  .photo-ph{max-width:320px}
+  .offer-body{text-align:center}
+  .un-credit{
+  text-align:center;
+  max-width:none;      /* release the 68ch cap so the credit fits on one line */
+}
+.un-credit .read-btn{margin-left:auto;margin-right:auto} /* center the button */
+
+/* --- LEDGER now light --- */
+.ledger{background:var(--paper);color:var(--text-ink)}
+.ledger .eyebrow{color:var(--text-ink)}
+.ledger .eyebrow .num{color:var(--signal-deep);background:rgba(23,125,120,.12)}
+.ledger-grid{
+  background:#fff;
+  box-shadow:var(--shadow-card-paper);
+}
+.ledger-col:hover{background:#faf8f2}
+.ledger-col+.ledger-col{border-left:1px solid var(--line-paper)}
+.ledger-tag{color:var(--signal-deep);background:rgba(23,125,120,.10)}
+.ledger-col p{color:var(--text-ink)}
+.ledger-note{color:var(--text-ink-dim);border-top-color:var(--line-paper)}
+
+
+.finding+.bar-title,
+.bar-title{margin-top:48px}
+
+.hero .cta-row{gap:10px 12px;flex-wrap:nowrap}
+.hero .btn{padding:12px 14px 12px 22px;font-size:.95rem;gap:10px}
+.hero .btn .arw{width:28px;height:28px;font-size:.9rem}
+.hero .link{padding:9px 14px;font-size:.9rem}
+
+/* let them wrap again on narrow screens so nothing overflows */
+@media(max-width:720px){
+  .hero .cta-row{flex-wrap:wrap}
+}
+/* ---------- top nav ---------- */
+.topnav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(12,15,20,.72);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  backdrop-filter:saturate(160%) blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.topnav-inner{
+  max-width:var(--maxw);margin:0 auto;
+  padding:0 clamp(22px,4vw,44px);
+  height:60px;display:flex;align-items:center;gap:20px;
+}
+.topnav-brand{
+  font-family:var(--heads);font-weight:700;font-size:.95rem;
+  letter-spacing:-.012em;color:var(--text);text-decoration:none;white-space:nowrap;
+}
+.topnav-links{
+  list-style:none;margin:0;padding:0;
+  display:flex;align-items:center;gap:2px;flex:1;justify-content:center;
+  overflow-x:auto;scrollbar-width:none;
+}
+.topnav-links::-webkit-scrollbar{display:none}
+.topnav-links a{
+  display:inline-block;padding:8px 13px;border-radius:9999px;
+  font-family:var(--heads);font-size:.87rem;font-weight:500;
+  color:var(--text-dim);text-decoration:none;white-space:nowrap;
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.topnav-links a:hover{color:var(--text);background:rgba(255,255,255,.07)}
+.topnav-cta{
+  font-family:var(--heads);font-size:.85rem;font-weight:600;letter-spacing:.002em;
+  color:#fff;text-decoration:none;white-space:nowrap;
+  padding:9px 18px;border-radius:9999px;
+  background:linear-gradient(180deg,#41bfb8 0%,#2ba39d 100%);
+  box-shadow:0 1px 2px rgba(6,10,14,.2),0 10px 22px -8px rgba(23,125,120,.55),inset 0 1px 0 rgba(255,255,255,.22);
+  transition:transform .18s var(--ease),filter .18s var(--ease);
+}
+.topnav-cta:hover{transform:translateY(-1px);filter:brightness(1.05)}
+
+/* anchor scroll offset so the sticky bar doesn't cover section tops */
+section,header.hero{scroll-margin-top:76px}
+
+/* on narrow screens, hide the middle link list, keep brand + Book CTA */
+@media(max-width:860px){
+  .topnav-links{display:none}
+  .topnav-inner{justify-content:space-between}
+}
+.ledger{padding-bottom:32px}
+.paper.offer{padding-top:40px}
+
+/* taller timeline so cards fit at their real date positions */
+.timeline{min-height:1300px}
+
+/* year labels sit ON TOP of the axis line, 100% opaque */
+.tl-year{
+  z-index:10;
+  background:var(--ink);
+  opacity:1;
+  font-weight:700;
+  padding:6px 14px;
+  border:1px solid var(--line);
+}
+
+/* duration bars on the axis — these are the "blocks that span the period" */
+.tl-span{
+  width:8px;
+  opacity:.9;
+  background:linear-gradient(180deg,var(--signal),var(--signal-deep));
+  box-shadow:0 0 14px rgba(56,178,172,.35);
+  border-radius:8px;
+  z-index:2;
+}
+.tl-dot{width:12px;height:12px;z-index:3}
+
+/* stronger connector line from card to its span on the axis */
+.tl-entry::after{background:var(--signal);opacity:.6;height:2px}
+
+.topnav-inner{height:56px;gap:14px}
+.topnav-brand{font-size:.85rem;letter-spacing:-.008em}
+.topnav-links{gap:0}
+.topnav-links a{padding:7px 11px;font-size:.82rem}
+.topnav-cta{padding:8px 16px;font-size:.82rem}
+
+/* also drop the sticky offset a bit to match the shorter bar */
+section,header.hero{scroll-margin-top:70px}
+
+.btn{
+  background:linear-gradient(180deg,#1e918b 0%,#146e6a 100%);
+  color:#fff;
+}
+.btn:hover{background:linear-gradient(180deg,#22a099 0%,#177d78 100%)}
+.btn:active{background:linear-gradient(180deg,#146e6a 0%,#0f5551 100%)}
+.un-credit .read-btn,
+.un-credit .read-btn:hover,
+.un-credit .read-btn:active{color:#fff}
+</style>
+
+
+</head>
+<body>
+<nav class="topnav" aria-label="Section navigation">
+  <div class="topnav-inner">
+    <ul class="topnav-links">
+      <li><a href="#how"> COLLABORATION </a></li>
+      <li><a href="#offer"> OFFER </a></li>
+      <li><a href="#work"> EXPERTISE </a></li>
+      <li><a href="#hyfe"> CASE I: HYFE </a></li>
+      <li><a href="#unwomen"> CASE II: UN WOMEN </a></li>
+      <li><a href="#research"> RESEARCH PUBLICATIONS </a></li>
+      <li><a href="#track"> BACKGROUND </a></li>
+      <li><a href="#about"> HOW I WORK </a></li>
+    </ul>
+    <a class="topnav-cta" href="#book"> Let's talk!</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap hero-grid">
+   <div class="hero-copy">
+    <div class="kicker"> research partnership 2026–27</div>
+    <p class="greet">Hi, I'm Daryna — and I'm a data scientist.</p>
+    <p class="subtext"> Most of the work happens before the modeling starts: deciding what to count, how to sample it, and whether the data can even answer the question.</p>
+    <p class="subhead"> <b>My strongest asset is in my mixed-methods background: </b>I know how to interrogate a dataset, pressure-test what it's really measuring, and relate the answer back to the people it's about.</p>
+    <div class="cta-row">
+      <a class="btn" href="https://calendar.google.com/calendar/embed?src=darynatk%40gmail.com&ctz=Europe%2FVienna" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"/></svg>Schedule a call <span class="arw">→</span></a>
+      <a class="link" href="https://docs.google.com/document/d/1nQ2KRdruJj3meMQs4DrzDj_g2eweat6DnOBDckdPGEs/edit?usp=sharing" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zm0 0v6h6M8 13h8M8 17h8M8 9h2"/></svg>Download CV ↗</a>
+      <a class="link" href="https://www.linkedin.com/in/daryna-tkachenko" target="_blank" rel="noopener"><svg class="ic ic-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05 4 0 4.74 2.64 4.74 6.07V21H17.5v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.85V21H9z"/></svg> LinkedIn ↗</a>
+    </div>
+   </div>
+   <div class="hero-photo">
+    <div class="photo-frame">
+    <!-- PHOTO: replace src below. For a self-contained file that works when emailed,
+         use a base64 data URI (src="data:image/png;base64,....") OR a Google Drive
+         direct-view link of the form https://drive.google.com/uc?export=view&id=FILE_ID -->
+    <img src="daryna_for_website.png" alt="Daryna Tkachenko" class="photo-ph">
+    </div>
+   </div>
+   </div>
+  </div>
+</header>
+
+<!-- ===================== THE SPLIT / LEDGER ===================== -->
+<section class="ledger" id="how">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">01</span> COLLABORATION <span class="ticks"></span></div>
+    <div class="ledger-grid">
+      <div class="ledger-col">
+        <div class="ledger-tag">You bring</div>
+        <p>The population, the data, and the access to it: a named contact and a real problem.</p>
+      </div>
+      <div class="ledger-col">
+        <div class="ledger-tag">I bring</div>
+        <p>The measurement design, the analysis, the modeling, the rigor, and the writeup.</p>
+        <p class="ledger-note">If the means to collect exist, I'm open to collecting the data too.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THE OFFER ===================== -->
+<section class="paper offer" id="offer">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">02</span> THE OFFER <span class="ticks"></span></div>
+    <p class="lead">Nine months as an embedded researcher on a problem your team has.</p>
+    <div class="offer-body">
+      <p>From <b>August 2026 to April 2027</b>, alongside my MSc in Applied Social Data Science at Central European University, I'll work as a part-time embedded researcher on a problem your team has. From my end, <b>I'll use our project as a case study for my thesis</b>. Any disclosure of insights and data descriptives will adhere to the boundaries authorized by our NDA.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHAT I DO — 3 archetypes ===================== -->
+<section id="work">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">03</span> EXPERTISE <span class="ticks"></span></div>
+    <div class="cards">
+      <article class="card">
+        <span class="idx">01 · Rigorous evaluation</span>
+        <h3>I dig into where models actually fail.</h3>
+        <p>At Hyfe, a close read of the hardest-classified cases surfaced <strong>label-quality issues</strong> a headline metric would have hidden. I notice the difference between a real model limitation and noisy ground truth.</p>
+      </article>
+      <article class="card">
+        <span class="idx">02 · Finding the real lever </span>
+        <h3>I search where the gains are.</h3>
+        <p> Before scaling up to resource-heavy architectures, <strong>I evaluate where a model's performance gains actually originate</strong>. At Hyfe, isolating the factors behind a CNN's performance indicated that data representation was driving the primary lift rather than the complex architecture itself. This distinction framed my optimization proposal for on-device deployment.</p>
+      </article>
+      <article class="card">
+        <span class="idx">03 · Segmentation with signal</span>
+        <h3>I choose the cut that carries the most information.</h3>
+        <p> I <strong>prioritize high-fidelity data cuts to uncover critical variance</strong>. At UN Women, macro-level averages masked severe vulnerabilities. By disaggregating data across gender, age, and regional vectors, I exposed hidden disparities that directly <strong>shaped targeted policy recommendations and resource allocation for the most exposed communities.</strong></p>
+      </article>
+    </div>
+    <p class="throughline"> My background in research methods allows me to match the instruments to the question instead of forcing every problem into one quantitative tool, which is common in the industry. <br> <span class="hi">Choosing <em>how</em> to measure is what separates a number from an answer.</span></p>
+  </div>
+</section>
+
+<!-- ===================== FIGURE ONE — 75/25 ===================== -->
+<section class="paper figure-block" id="hyfe">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">04</span> CASE ONE · HYFE INC <span class="ticks"></span></div>
+    <div class="fig-lead">
+      <h2>A four-model comparison that turned secondary discoveries to primary product impact suggestions.</h2>
+      <p>The task was to compare four model families for cough detection on the same 1.49M-clip dataset, under one frozen evaluation protocol, and establish which performs best. A convolutional neural network won cleanly. But <b>the ranking itself proved less useful than what the model's errors revealed — two results that came from examining where and why it failed.</b></p>
+    </div>
+
+    <div class="finding">
+      <span class="finding-idx">Finding 01</span>
+      <h3 class="finding-h">Was it the model, or how the data was fed to it?</h3>
+      <p class="finding-p"> The CNN's edge could stem from its deep architecture, or simply from the rich information density of the log-mel spectrogram it processed. To isolate this variable, I extracted that exact high-density audio representation and fed it into a much simpler, low-overhead gradient boosting model. By holding the data input constant, I isolated the true architectural lift. <b>The result? Most of the performance gap vanished.</b></p>
+    </div>
+
+    <p class="bar-title">Where the CNN's advantage over the simpler model actually came from</p>
+    <div class="bar75" id="bar75" aria-label="The model's advantage split into two sources: about 75 percent from how the data was represented, about 25 percent from the model architecture itself">
+      <div class="seg seg-rep" data-w="75">
+        <span class="pct">~75%</span>
+        <span class="lbl">from how the data was fed in</span>
+      </div>
+      <div class="seg seg-arch" data-w="25">
+        <span class="pct">~25%</span>
+        <span class="lbl">from the model itself</span>
+      </div>
+    </div>
+
+    <div class="seg-legend">
+      <div class="sl sl-rep">
+        <span class="sl-key"> The Pipeline Layer </span>
+        <span class="sl-txt"> Converting audio to log-mel spectrograms is computationally cheap and highly reusable.</span>
+      </div>
+      <div class="sl sl-arch">
+        <span class="sl-key"> The Architectural Layer </span>
+        <span class="sl-txt"> The convolutional network added a massive footprint: roughly ×100 times slower per clip and highly restrictive for constrained on-device hardware.</span>
+      </div>
+    </div>
+
+    <p class="fig-cap"><strong>Why this matters:</strong> A significantly lighter model utilizing the same well-prepared input
+      recovered the vast majority of performance (PR-AUC 0.80 vs the CNN's 0.90) at a fraction of the compute cost — a candidate worth
+      developing for phones and low-power devices, and a trade-off that wasn't in the original brief. <span class="fig-note">(Note: At strict operational thresholds, the representation accounts for roughly two-thirds of the gap).</span>
+    </p>
+
+    <div class="finding">
+      <span class="finding-idx">Finding 02</span>
+      <h3 class="finding-h">Some of the "errors" weren't errors.</h3>
+      <p class="finding-p">Forty-two coughs were missed by <em>every</em> model. Rather than report that as a failure rate, I ran a qualitative audit: I listened to twenty of them by ear and sorted each one. A quarter were clear coughs the test set had mislabelled — so the models were penalised for being right. Half weren't coughs at all. The takeaway: the reported error rate is a <b>ceiling, not a measurement</b> — some apparent failures are the model correctly overruling a bad label. I gave Hyfe a candidate list of test-set labels to reconsider.</p>
+    </div>
+    <div class="mini-stats">
+      <span>42 coughs missed by all four models</span>
+      <span>20 audited by ear</span>
+      <span>~25% were mislabels, not misses</span>
+    </div>
+
+    <div class="finding">
+      <span class="finding-idx">Finding 03</span>
+      <h3 class="finding-h">The advantage was really about <br> generalizing to unseen data.</h3>
+      <p class="finding-p"> The critical differentiator was out-of-distribution generalization. The tabular models had inadvertently
+        memorized the unique acoustic profiles of the training microphones, causing their performance to plummet by over 0.40 PR-AUC
+        on unseen recording sources. Conversely, the CNN isolated the actual features of the sound, maintaining stability with
+        a minor 0.08 drop.</p>
+    </div>
+    <div class="mini-stats">
+      <span>Validation-to-test drop — tabular models −0.40 to −0.44</span>
+      <span>CNN −0.08</span>
+    </div>
+
+    <p class="fig-cap closing"><strong>The through-line:</strong> the last two results weren't part of the benchmark I was asked to run — they came from treating the errors as data rather than stopping at a leaderboard. Both went back to Hyfe as things worth considering: a set of test labels to review, and evidence on how each model family holds up under distribution shift.</p>
+
+    <div class="chips">
+      <span class="chip">CNN · PR-AUC <b>0.90</b> · <b>94%</b> sensitivity at 95% specificity</span>
+      <span class="chip">Held-out test set · <b>29,510</b> clips</span>
+      <span class="chip">Lightweight GBM on spectrograms · PR-AUC <b>0.80</b> · ~<b>100×</b> faster</span>
+      <span class="chip">Leakage-safe grouped CV · bootstrap 95% CIs</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== FIGURE TWO — UN Women ===================== -->
+<section id="unwomen">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">05</span> CASE TWO · UN WOMEN × SOCIOINFORM <span class="ticks"></span></div>
+    <div class="un-head">
+      <div class="method">Mixed · n = 1,000 representative nationwide survey + focus group + 5 expert interviews</div>
+      <h2>Gender Dimension <br> of the Energy Crisis in Ukraine</h2>
+      <p class="q">How does the energy crisis fall differently on demographic groups, and what shapes their resilience through outages?</p>
+    </div>
+
+    <div class="contrast">
+      <div class="contrast-cell muted">
+        <div class="big">61%</div>
+        <p class="cap">say the crisis affects men and women <b>similarly</b></p>
+      </div>
+      <div class="contrast-cell">
+        <div class="big">90%</div>
+        <p class="cap">…yet the same respondents agree outages make domestic work harder <b>specifically for women</b></p>
+      </div>
+    </div>
+
+    <div class="un-numbers">
+      <div class="pair">
+        <span class="l">Stable electricity "very important"</span>
+        <span class="v"><span class="w">women 84%</span> / men 75%</span>
+      </div>
+      <div class="pair">
+        <span class="l">Outages create "extreme difficulties"</span>
+        <span class="v"><span class="w">women 37%</span> / men 27%</span>
+      </div>
+    </div>
+
+    <div class="un-why">
+    <p style="margin-bottom: 1.25rem;">A brief empirical example from this study <strong>demonstrates how granular analysis changes the direction of policy</strong>. While 61% of respondents initially reported that the crisis impacted men and women equally, digging beneath the surface revealed a different reality: 90% of those same households experienced severe disparities in care and domestic workloads. <strong>My analysis accounted for these systemic differences by breaking down the data to ensure resources matched actual human needs:</strong></p>
+
+    <!-- Pushes the entire list inward with inline styling -->
+    <ul style="margin-left: 2rem; list-style-type: none; padding: 0;">
+      <li style="margin-bottom: 1.25rem;">
+        <strong c style="color: #ffffff;">• Rejecting the Average:</strong> I moved past the headline metrics to pinpoint precisely where the burden was concentrated — specifically identifying older women, rural mothers, and women with disabilities in the southeast region.
+      </li>
+      <li style="margin-bottom: 1.25rem;">
+        <strong style="color: #ffffff;">• Designing for Demographics:</strong> Recognizing that a single crisis yields highly distinct needs, I isolated the specific pressures facing each subgroup.
+      </li>
+      <li style="margin-bottom: 1.25rem;">
+        <strong style="color: #ffffff;">• Data to Direct Action:</strong> These precise demographic segments directly shaped the final policy recommendations, turning an abstract statistic into targeted, high-impact resource allocation.
+      </li>
+    </ul>
+      <p class="un-credit"> Co-authored with my colleagues at Socioinform; Data visualization · UN Women Ukraine, Apr 2025<br>
+      <a class="read-btn" href="https://ukraine.unwomen.org/en/digital-library/publications/2025/04/doslidzhennya-hendernyy-vymir-enerhetychnoyi-kryzy-v-ukrayini-shlyakhy-do-stiykosti" target="_blank" rel="noopener">Read the report ↗</a>
+  </div>
+</section>
+
+<!-- ===================== SELECTED RESEARCH ===================== -->
+<section class="paper" id="research">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">06</span> RESEARCH PUBLICATIONS <span class="ticks"></span></div>
+    <div class="pubs">
+
+      <article class="pub">
+        <div class="mtag">Quantitative</div>
+        <h3>What Ukrainian Teenagers Know About Online Safety. What do They Ignore?</h3>
+        <p class="move">A survey was the right tool for this study because the question was about prevalence: how widespread is risky behaviour, and does knowing the risks change it? I helped develop the questionnaire to separate knowledge from behaviour, so the gap between them could be measured directly.</p>
+        <p class="find">The main finding was that most teens name the threats of Russian FSB's cyberattacks, yet act unsafely anyway.</p>
+        <p class="credit"> n = 253 teens (14–18), representative nationwide sample· Original analysis and sole authorship · Texty.org.ua, Oct 2025</p>
+        <a class="read-btn" href="https://texty.org.ua/articles/116119/progalini-v-kiberbezpeci-i-rizikovana-povedinka-doslidzhennya-cifrovix-zvichok-ukrayinskix-pidlitkiv/" target="_blank" rel="noopener">Read the article ↗</a>
+      </article>
+
+      <article class="pub">
+        <div class="mtag">Mixed methods</div>
+        <h3> The Drivers of AWOL: Why Personnel Leave and What Brings Them Back </h3>
+        <p class="move">This population couldn't be sampled cleanly since going AWOL is a criminal offense. I combined two instruments to fit that constraint: an anonymous online survey to get honest answers about a prosecutable act, and a few in-depth interviews with those who agreed to open up about a painful subject.</p>
+        <p class="find"> The study challenged a common assumption about AWOL: 79% of respondents had voluntarily joined the military, suggesting that the key issue is not who serves, but the conditions under which some decide to leave.</p>
+        <p class="credit"> n = 128 anonymous + 4 in-depth interviews · Sole interviewer & author; Original analysis · Texty.org.ua, Jan 2025</p>
+        <a class="read-btn" href="https://texty.org.ua/articles/114257/hto-i-chomu-pishov-u-szch-i-za-yakyh-umov-povernetsya-textyorgua-provely-doslidzhennya/" target="_blank" rel="noopener">Read the article ↗</a>
+      </article>
+
+      <article class="pub">
+        <div class="mtag">Qualitative</div>
+        <h3>How War Changes the Families Veterans Come Home To</h3>
+        <p class="move">Because veterans and their families represent a highly sensitive population, and the central question (how reintegration is experienced in a civilian setting?) lacks established baseline metrics, quantitative sampling was premature. I deployed purposive in-depth interviews to shift the analytical focus from the individual veteran to the entire family as a structural social unit.</p>
+        <p class="find">This systemic framing exposed the invisible caregiving and psychological labor carried by relatives. It captured institutional data points that individual-level veteran tracking completely misses.</p>
+        <p class="credit"> 8 participants · Sole interviewer & author; Original analysis · Texty.org.ua, Dec 2025</p>
+        <a class="read-btn" href="https://texty.org.ua/articles/116506/povernennya-dodomu-yak-vijna-zminyuye-rodyny-veteraniv-i-yaka-pidtrymka-yim-neobxidna-doslidzhennya/" target="_blank" rel="noopener">Read the article ↗</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TIMELINE ===================== -->
+<section id="track">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">07</span> BACKGROUND <span class="ticks"></span></div>
+
+    <div class="timeline">
+      <div class="tl-side exp">
+        <div class="tl-entry" data-track="Work" style="top:2%">
+          <div class="when">Apr–Jun 2026 · Remote</div>
+          <h4>Data Scientist Intern</h4>
+          <div class="org">Hyfe Inc.</div>
+          <div class="tl-tags">
+            <span class="tl-tag">model evaluation</span>
+            <span class="tl-tag">Python · sklearn · LightGBM</span>
+            <span class="tl-tag">TensorFlow/Keras</span>
+            <span class="tl-tag">reproducible ML pipelines</span>
+            <span class="tl-tag">label-quality auditing</span>
+          </div>
+        </div>
+        <div class="tl-entry" data-track="Work" style="top:22%">
+          <div class="when">Nov 2024 – Dec 2025 · Project-based</div>
+          <h4>Research &amp; Data Journalist</h4>
+          <div class="org">Texty.org.ua</div>
+          <div class="context">Three published studies linked in the section above</div>
+          <div class="tl-tags">
+            <span class="tl-tag">research design</span>
+            <span class="tl-tag">delivering &amp; presenting results</span>
+            <span class="tl-tag">communicating to non-specialists</span>
+            <span class="tl-tag">survey &amp; interview instruments</span>
+            <span class="tl-tag">data storytelling</span>
+          </div>
+        </div>
+        <div class="tl-entry" data-track="Work" style="top:45%">
+          <div class="when">Mar 2024 – Sep 2025 · Lviv</div>
+          <h4>Data Research Analyst</h4>
+          <div class="org">Socioinform</div>
+          <div class="context">Delivered for UNDP, UN Women, International Renaissance Foundation, World Bank and many more</div>
+          <div class="tl-tags">
+            <span class="tl-tag">large-scale data analysis</span>
+            <span class="tl-tag">segmentation</span>
+            <span class="tl-tag">stakeholder translation</span>
+            <span class="tl-tag">data viz</span>
+            <span class="tl-tag">mixed-methods design</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-axis" aria-hidden="true">
+        <span class="tl-year" style="top:0">2027</span>
+        <span class="tl-year" style="top:33.3%">2025</span>
+        <span class="tl-year" style="top:66.6%">2023</span>
+        <span class="tl-year" style="top:100%;transform:translate(-50%,-100%)">2021</span>
+        <!-- duration spines: top = (2027-startYr)*16.667%, height = years*16.667% -->
+        <!-- Hyfe Apr–Jun 2026 -->
+        <span class="tl-span" style="top:12.5%;height:4.2%"></span><span class="tl-dot" style="top:12.5%"></span>
+        <!-- Texty Nov 2024–Dec 2025 -->
+        <span class="tl-span" style="top:18.0%;height:18.2%"></span><span class="tl-dot" style="top:18.0%"></span>
+        <!-- Socioinform Mar 2024–Sep 2025 -->
+        <span class="tl-span" style="top:20.8%;height:26.4%"></span><span class="tl-dot" style="top:20.8%"></span>
+        <!-- MSc Sep 2025–May 2027 -->
+        <span class="tl-span" style="top:1.4%;height:22.2%"></span><span class="tl-dot" style="top:1.4%"></span>
+        <!-- BA Aug 2021–May 2025 -->
+        <span class="tl-span" style="top:26.4%;height:62.5%"></span><span class="tl-dot" style="top:26.4%"></span>
+      </div>
+
+      <div class="tl-side edu">
+        <div class="tl-entry" data-track="Study" style="top:0%">
+          <div class="when">Sep 2025 – May 2027 · Vienna · GPA: 3.7 </div>
+          <h4> MSc, Applied Social Data Science</h4>
+          <div class="org">Central European University</div>
+          <div class="tl-tags">
+            <span class="tl-tag">advanced ML</span>
+            <span class="tl-tag">statistical modeling</span>
+            <span class="tl-tag">databases · SQL</span>
+            <span class="tl-tag">Python</span>
+          </div>
+        </div>
+        <div class="tl-entry" data-track="Study" style="top:68%">
+          <div class="when">Aug 2021 – May 2025 · Lviv · GPA 3.9</div>
+          <h4>BA Sociology, Summa cum Laude</h4>
+          <div class="org">Ukrainian Catholic University</div>
+          <div class="context">Exchanges: Notre Dame (USA, GPA 3.8) · IULM (Italy) · UAB (Spain)</div>
+          <div class="tl-tags">
+            <span class="tl-tag">research methodologies</span>
+            <span class="tl-tag">mixed methods</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section class="paper about" id="about">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">08</span> HOW I WORK <span class="ticks"></span></div>
+    <div class="about-grid">
+      <div class="about-copy">
+        <p>I start by distrusting the question. Many projects fail quietly at the beginning: the wrong thing gets prioritized, the sample skips the people who matter, the labels encode someone's assumption. No model can recover from that. So before I model anything, I want to know what the data is actually measuring, who it left out, and where it's lying.</p>
+        <p>Only then do I build the pipelines and train the models. I treat the measurement as the part most likely to be wrong, because in my experience it usually is. Get that right, and the modeling is often the easy part. Get it wrong, and the modeling just launders the error.</p>
+      </div>
+      <div class="about-facts">
+        <div class="row"><span class="k">Authorization</span><span class="v">Full Austrian work authorization through Mar 2027</span></div>
+        <div class="row"><span class="k">Languages</span><span class="v">English (fluent) · Ukrainian (native) · <br> Spanish (elementary) · Polish, German (basic)</span></div>
+        <div class="row"><span class="k">Based</span><span class="v">Vienna, Austria</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CLOSING CTA ===================== -->
+<section class="close" id="book">
+  <div class="wrap">
+    <h2>If my skills fit a problem on your roadmap, let's talk.</h2>
+    <p>A brief call is enough to see whether we're a fit. Bring the problem, I'll bring the questions.</p>
+    <div class="cta-row">
+      <a class="btn" href="https://calendar.google.com/calendar/embed?src=darynatk%40gmail.com&ctz=Europe%2FVienna" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"/></svg>Schedule a call <span class="arw">→</span></a>
+    </div>
+    <p class="beneath">
+      <a href="https://docs.google.com/document/d/1nQ2KRdruJj3meMQs4DrzDj_g2eweat6DnOBDckdPGEs/edit?usp=sharing" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zm0 0v6h6M8 13h8M8 17h8M8 9h2"/></svg>Résumé</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/daryna-tkachenko" target="_blank" rel="noopener"><svg class="ic ic-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05 4 0 4.74 2.64 4.74 6.07V21H17.5v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.85V21H9z"/></svg>LinkedIn</a>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;width:100%;max-width:var(--maxw);margin:0 auto;padding:0 28px">
+    <span>Daryna Tkachenko, Data Scientist, MSc of Applied Social Data Science at CEU</span>
+    <span>Research partnership · Aug 2026 – Apr 2027</span>
+  </div>
+</footer>
+
+<script>
+  // One orchestrated moment: the 75/25 bar animates to its split on scroll-into-view.
+  // The bar's correct 75/25 split is set in CSS, so it is always legible even if this
+  // script never runs. When it does run, we briefly collapse then re-fill for the reveal.
+  (function(){
+    var bar = document.getElementById('bar75');
+    if(!bar) return;
+    var segs = bar.querySelectorAll('.seg');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce) return; // leave CSS widths as-is
+    function fill(){ segs.forEach(function(s){ s.style.width = s.dataset.w + '%'; }); }
+    // collapse first (no transition) so the fill animates from zero
+    segs.forEach(function(s){ s.style.transition='none'; s.style.width='0%'; });
+    // force reflow, then restore transition
+    void bar.offsetWidth;
+    segs.forEach(function(s){ s.style.transition=''; });
+    var done=false;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting && !done){ done=true; fill(); io.disconnect(); }
+      });
+    }, {threshold:0.4});
+    io.observe(bar);
+    // safety net: if it never triggers within 3s, fill anyway
+    setTimeout(function(){ if(!done){ done=true; fill(); io.disconnect(); } }, 3000);
+  })();
+</script>
+
+</body>
+</html>
