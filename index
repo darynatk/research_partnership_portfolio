@@ -388,9 +388,9 @@
   .chip:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-paper)}
   .chip b{color:var(--signal-deep);font-weight:700}
 
-  /* ============================================================
+  /* ===========================================================
      FIGURE TWO 
-     ============================================================ */
+     =========================================================== */
   .un-head{max-width:var(--measure);margin:0 auto 14px;text-align:center}
   .un-head .method{
     display:inline-block;
