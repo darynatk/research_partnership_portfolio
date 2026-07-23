@@ -878,21 +878,21 @@ section,header.hero{scroll-margin-top:70px}
     <div class="cards">
       <article class="card">
         <span class="idx">01 · Rigorous evaluation</span>
-        <h3>I dig into where models actually fail.</h3>
-        <p>At Hyfe, a close read of the hardest-classified cases surfaced <strong>label-quality issues</strong> a headline metric would have hidden. I notice the difference between a real model limitation and noisy ground truth.</p>
+        <h3>I look at where models fail, not just how often.</h3>
+        <p>At Hyfe, listening to the 20 hardest-classified cases by ear showed that a quarter of them were potentially mislabeled. The reported error rate wasn't measuring what it looked like it: I notice the difference between a real model limitation and noisy ground truth.</p>
       </article>
       <article class="card">
         <span class="idx">02 · Finding the real lever </span>
-        <h3>I search where the gains are.</h3>
-        <p> Before scaling up to resource-heavy architectures, <strong>I evaluate where a model's performance gains actually originate</strong>. At Hyfe, isolating the factors behind a CNN's performance indicated that data representation was driving the primary lift rather than the complex architecture itself. This distinction framed my optimization proposal for on-device deployment.</p>
+        <h3>I search where the gains are before adding complexity.</h3>
+        <p>At Hyfe, I ran a controlled experiment to see whether a CNN's advantage came from its architecture or from the input representation it was fed. About 75% came from the input. That changed what I recommended for edge deployment.</p>
       </article>
       <article class="card">
         <span class="idx">03 · Segmentation with signal</span>
         <h3>I choose the cut that carries the most information.</h3>
-        <p> I <strong>prioritize high-fidelity data cuts to uncover critical variance</strong>. At UN Women, macro-level averages masked severe vulnerabilities. By disaggregating data across gender, age, and regional vectors, I exposed hidden disparities that directly <strong>shaped targeted policy recommendations and resource allocation for the most exposed communities.</strong></p>
+        <p>At UN Women, an aggregate 61% figure said the energy crisis affected men and women "similarly." Breaking the data down by gender, age, and region showed 90% of the same respondents describing sharply gendered burdens. The segmentation was the finding.</p>
       </article>
     </div>
-    <p class="throughline"> My background in research methods allows me to match the instruments to the question instead of forcing every problem into one quantitative tool, which is common in the industry. <br> <span class="hi">Choosing <em>how</em> to measure is what separates a number from an answer.</span></p>
+    <p class="throughline"> Coming from research methods means I ask what's the right instrument for the question, instead of defaulting to whatever ML tool is at hand. <br> <span class="hi">Choosing <em>how</em> to measure is what separates a number from an answer.</span></p>
   </div>
 </section>
 
@@ -902,13 +902,13 @@ section,header.hero{scroll-margin-top:70px}
     <div class="eyebrow"><span class="num">04</span> CASE ONE · HYFE INC <span class="ticks"></span></div>
     <div class="fig-lead">
       <h2>A four-model comparison that turned secondary discoveries to primary product impact suggestions.</h2>
-      <p>The task was to compare four model families for cough detection on the same 1.49M-clip dataset, under one frozen evaluation protocol, and establish which performs best. A convolutional neural network won cleanly. But <b>the ranking itself proved less useful than what the model's errors revealed — two results that came from examining where and why it failed.</b></p>
+      <p>The task was to compare four model families for cough detection on the same 1.49M-clip dataset, under one frozen evaluation protocol, and establish which performs best. A convolutional neural network won cleanly. <b>The ranking wasn't the interesting part though.</b> What I got from looking at what the models got wrong turned out to matter more.</p>
     </div>
 
     <div class="finding">
       <span class="finding-idx">Finding 01</span>
       <h3 class="finding-h">Was it the model, or how the data was fed to it?</h3>
-      <p class="finding-p"> The CNN's edge could stem from its deep architecture, or simply from the rich information density of the log-mel spectrogram it processed. To isolate this variable, I extracted that exact high-density audio representation and fed it into a much simpler, low-overhead gradient boosting model. By holding the data input constant, I isolated the true architectural lift. <b>The result? Most of the performance gap vanished.</b></p>
+      <p class="finding-p"> The CNN's advantage could have come from its architecture, or from working on a richer input (the log-mel spectrogram) than the classical models saw. To find out, I retrained the same gradient boosting model on the CNN's exact spectrogram input. Only the model family differed. About 75% of the performance gap disappeared. </p>
     </div>
 
     <p class="bar-title">Where the CNN's advantage over the simpler model actually came from</p>
@@ -934,15 +934,13 @@ section,header.hero{scroll-margin-top:70px}
       </div>
     </div>
 
-    <p class="fig-cap"><strong>Why this matters:</strong> A significantly lighter model utilizing the same well-prepared input
-      recovered the vast majority of performance (PR-AUC 0.80 vs the CNN's 0.90) at a fraction of the compute cost — a candidate worth
-      developing for phones and low-power devices, and a trade-off that wasn't in the original brief. <span class="fig-note">(Note: At strict operational thresholds, the representation accounts for roughly two-thirds of the gap).</span>
+    <p class="fig-cap"><strong>Why this matters:</strong> A lighter model on the same input reached PR-AUC 0.80 vs the CNN's 0.90, at roughly 1/100 the compute per prediction. That is a real candidate for phones and low-power devices <span class="fig-note">(Note: At strict operational thresholds, the representation accounts for roughly two-thirds of the gap).</span>
     </p>
 
     <div class="finding">
       <span class="finding-idx">Finding 02</span>
       <h3 class="finding-h">Some of the "errors" weren't errors.</h3>
-      <p class="finding-p">Forty-two coughs were missed by <em>every</em> model. Rather than report that as a failure rate, I ran a qualitative audit: I listened to twenty of them by ear and sorted each one. A quarter were clear coughs the test set had mislabelled — so the models were penalised for being right. Half weren't coughs at all. The takeaway: the reported error rate is a <b>ceiling, not a measurement</b> — some apparent failures are the model correctly overruling a bad label. I gave Hyfe a candidate list of test-set labels to reconsider.</p>
+      <p class="finding-p">Forty-two coughs were missed by <em>every</em> model. Rather than report that as a failure rate, I ran a qualitative audit: I listened to twenty of them by ear and sorted each one. A quarter were clear coughs the test set had mislabelled. The models were penalised for being right. The takeaway: the reported error rate is a <b>ceiling, not a measurement</b> — some apparent failures are the model correctly overruling a bad label. I gave Hyfe a candidate list of test-set labels to reconsider.</p>
     </div>
     <div class="mini-stats">
       <span>42 coughs missed by all four models</span>
@@ -953,17 +951,14 @@ section,header.hero{scroll-margin-top:70px}
     <div class="finding">
       <span class="finding-idx">Finding 03</span>
       <h3 class="finding-h">The advantage was really about <br> generalizing to unseen data.</h3>
-      <p class="finding-p"> The critical differentiator was out-of-distribution generalization. The tabular models had inadvertently
-        memorized the unique acoustic profiles of the training microphones, causing their performance to plummet by over 0.40 PR-AUC
-        on unseen recording sources. Conversely, the CNN isolated the actual features of the sound, maintaining stability with
-        a minor 0.08 drop.</p>
+      <p class="finding-p"> The tabular models had learned the acoustic fingerprints of the specific microphones in the training set. When tested on recording sources they hadn't seen, their performance dropped by 0.40+ PR-AUC. The CNN dropped only 0.08. It was learning the sound itself, not the recording setup.</p>
     </div>
     <div class="mini-stats">
       <span>Validation-to-test drop — tabular models −0.40 to −0.44</span>
       <span>CNN −0.08</span>
     </div>
 
-    <p class="fig-cap closing"><strong>The through-line:</strong> the last two results weren't part of the benchmark I was asked to run — they came from treating the errors as data rather than stopping at a leaderboard. Both went back to Hyfe as things worth considering: a set of test labels to review, and evidence on how each model family holds up under distribution shift.</p>
+    <p class="fig-cap closing"><strong>The through-line:</strong> The last two findings weren't in the brief. They came from treating the errors as data, instead of just counting on the result.</p>
 
     <div class="chips">
       <span class="chip">CNN · PR-AUC <b>0.90</b> · <b>94%</b> sensitivity at 95% specificity</span>
@@ -1008,18 +1003,18 @@ section,header.hero{scroll-margin-top:70px}
     </div>
 
     <div class="un-why">
-    <p style="margin-bottom: 1.25rem;">A brief empirical example from this study <strong>demonstrates how granular analysis changes the direction of policy</strong>. While 61% of respondents initially reported that the crisis impacted men and women equally, digging beneath the surface revealed a different reality: 90% of those same households experienced severe disparities in care and domestic workloads. <strong>My analysis accounted for these systemic differences by breaking down the data to ensure resources matched actual human needs:</strong></p>
+    <p style="margin-bottom: 1.25rem;">One finding from this study shows that <strong>granular analysis can actually change policies.</strong>. While 61% of respondents initially reported that the crisis impacted men and women equally, digging beneath the surface revealed a different reality: 90% of those same households experienced severe disparities in care and domestic workloads. <strong>My analysis accounted for these systemic differences by breaking down the data to ensure resources matched actual human needs:</strong></p>
 
     <!-- Pushes the entire list inward with inline styling -->
     <ul style="margin-left: 2rem; list-style-type: none; padding: 0;">
       <li style="margin-bottom: 1.25rem;">
-        <strong c style="color: #ffffff;">• Rejecting the Average:</strong> I moved past the headline metrics to pinpoint precisely where the burden was concentrated — specifically identifying older women, rural mothers, and women with disabilities in the southeast region.
+        • I looked past the headline number to see where the burden actually landed: older women, rural mothers, and women with disabilities in the southeast.
       </li>
       <li style="margin-bottom: 1.25rem;">
-        <strong style="color: #ffffff;">• Designing for Demographics:</strong> Recognizing that a single crisis yields highly distinct needs, I isolated the specific pressures facing each subgroup.
+       • Different subgroups faced very different pressures — the "average Ukrainian woman" wasn't a useful unit for policy.
       </li>
       <li style="margin-bottom: 1.25rem;">
-        <strong style="color: #ffffff;">• Data to Direct Action:</strong> These precise demographic segments directly shaped the final policy recommendations, turning an abstract statistic into targeted, high-impact resource allocation.
+       • The specific segments shaped the report's final recommendations for who to prioritize with resources..
       </li>
     </ul>
       <p class="un-credit"> Co-authored with my colleagues at Socioinform; Data visualization · UN Women Ukraine, Apr 2025<br>
@@ -1054,8 +1049,8 @@ section,header.hero{scroll-margin-top:70px}
       <article class="pub">
         <div class="mtag">Qualitative</div>
         <h3>How War Changes the Families Veterans Come Home To</h3>
-        <p class="move">Because veterans and their families represent a highly sensitive population, and the central question (how reintegration is experienced in a civilian setting?) lacks established baseline metrics, quantitative sampling was premature. I deployed purposive in-depth interviews to shift the analytical focus from the individual veteran to the entire family as a structural social unit.</p>
-        <p class="find">This systemic framing exposed the invisible caregiving and psychological labor carried by relatives. It captured institutional data points that individual-level veteran tracking completely misses.</p>
+        <p class="move">Veterans and their families are a sensitive population, and I didn't have baseline data to design a survey on how reintegration is experienced at home. So I used in-depth interviews, and I chose to focus not on the individual veteran but on the whole family unit as a social structure where the reintegration actually plays out.</p>
+        <p class="find">That framing made visible that the caregiving and emotional labor that partners and parents were doing was mostly uncounted.</p>
         <p class="credit"> 8 participants · Sole interviewer & author; Original analysis · Texty.org.ua, Dec 2025</p>
         <a class="read-btn" href="https://texty.org.ua/articles/116506/povernennya-dodomu-yak-vijna-zminyuye-rodyny-veteraniv-i-yaka-pidtrymka-yim-neobxidna-doslidzhennya/" target="_blank" rel="noopener">Read the article ↗</a>
       </article>
@@ -1163,7 +1158,7 @@ section,header.hero{scroll-margin-top:70px}
     <div class="eyebrow"><span class="num">08</span> HOW I WORK <span class="ticks"></span></div>
     <div class="about-grid">
       <div class="about-copy">
-        <p>I start by distrusting the question. Many projects fail quietly at the beginning: the wrong thing gets prioritized, the sample skips the people who matter, the labels encode someone's assumption. No model can recover from that. So before I model anything, I want to know what the data is actually measuring, who it left out, and where it's lying.</p>
+        <p>I start by distrusting the question. Many projects fail quietly at the beginning: the wrong thing gets prioritized, the sample skips the people who matter, the labels encode someone's assumption. No model can recover from that. So before I model anything, I want to know what the data is actually measuring, who it left out, and where it's misleading.</p>
         <p>Only then do I build the pipelines and train the models. I treat the measurement as the part most likely to be wrong, because in my experience it usually is. Get that right, and the modeling is often the easy part. Get it wrong, and the modeling just launders the error.</p>
       </div>
       <div class="about-facts">
